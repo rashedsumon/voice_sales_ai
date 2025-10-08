@@ -1,3 +1,14 @@
+# Legal / Safety
+
+# Do not run this against real numbers without consent. Confirm local laws before deploying.
+
+# Folder structure
+
+# (See repository root)
+
+# Notes
+
+# This demo includes simulation mode so you can test flows without placing calls.
 
 import os
 from dotenv import load_dotenv
