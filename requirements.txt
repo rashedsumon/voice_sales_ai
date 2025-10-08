@@ -1,0 +1,31 @@
+# runtime
+
+streamlit
+
+# telephony
+twilio
+
+# speech / audio
+google-cloud-speech
+gTTS
+pydub
+
+# NLP & ML
+scikit-learn
+transformers
+sentence-transformers
+torch
+
+# LLM / HTTP
+openai
+requests
+
+# util
+pandas
+numpy
+python-dotenv
+python-multipart
+
+# optional helpful
+uvicorn
+fastapi

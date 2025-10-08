@@ -1,0 +1,27 @@
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# virtual env
+venv/
+.env
+.env.* 
+secrets.json
+
+# streamlit
+.streamlit/
+
+# logs
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints
+
+# local OS
+.DS_Store
+Thumbs.db
