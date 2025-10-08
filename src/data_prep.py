@@ -1,29 +1,56 @@
 import os
 import pandas as pd
 
-def load_kaggle_dataset(path="/kaggle/input/call-center-transcripts-dataset"):
+def load_kaggle_dataset(dataset_path: str = "/kaggle/input/call-center-transcripts-dataset") -> pd.DataFrame:
     """
-    Load dataset. Adjust depending on dataset file names.
-    Expects CSV files or JSONL transcripts.
-    """
-    # try common file names
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Dataset path not found: {path}")
-    # find first csv
-    files = [f for f in os.listdir(path) if f.lower().endswith(".csv")]
-    if not files:
-        raise FileNotFoundError("No CSV files found in dataset folder.")
-    df = pd.read_csv(os.path.join(path, files[0]))
-    return df
+    Loads a Kaggle dataset from the specified path.
+    Expects one or more CSV files within the directory.
 
-def prepare_intent_training(df, text_column="transcript", label_column="intent"):
+    Parameters:
+        dataset_path (str): Path to the dataset folder.
+
+    Returns:
+        pd.DataFrame: Loaded dataset as a pandas DataFrame.
+
+    Raises:
+        FileNotFoundError: If the dataset path or CSV file is missing.
     """
-    Simplified function to obtain X,y for intent classifier training.
-    Assumes dataset has transcript text and (optionally) labels.
+    if not os.path.exists(dataset_path):
+        raise FileNotFoundError(f"❌ Dataset path not found: {dataset_path}")
+
+    # Identify CSV files in the directory
+    csv_files = [file for file in os.listdir(dataset_path) if file.lower().endswith(".csv")]
+    if not csv_files:
+        raise FileNotFoundError("❌ No CSV files found in the dataset folder.")
+
+    # Load the first CSV file
+    file_path = os.path.join(dataset_path, csv_files[0])
+    print(f"✅ Loading dataset from: {file_path}")
+    return pd.read_csv(file_path)
+
+
+def prepare_intent_training(df: pd.DataFrame, text_column: str = "transcript", label_column: str = "intent"):
     """
+    Prepares input features (X) and labels (y) for intent classification.
+
+    Parameters:
+        df (pd.DataFrame): Input dataset.
+        text_column (str): Name of the column containing conversation text.
+        label_column (str): Name of the column containing intent labels.
+
+    Returns:
+        tuple: (X, y)
+            X -> List of text samples.
+            y -> List of intent labels, or None if labels are missing.
+    """
+    if text_column not in df.columns:
+        raise ValueError(f"❌ Text column '{text_column}' not found in dataset.")
+
     if label_column not in df.columns:
-        print("No label column found; you'll need to label data for supervised training.")
-        return df[text_column].tolist(), None
+        print("⚠️ No label column found. Returning text only for unsupervised or manual labeling.")
+        return df[text_column].astype(str).tolist(), None
+
     X = df[text_column].astype(str).tolist()
     y = df[label_column].astype(str).tolist()
+    print(f"✅ Prepared {len(X)} samples for intent classification training.")
     return X, y
